@@ -51,11 +51,11 @@ class Chat:
         if not api_key:
             raise ValueError("Missed CLAUDE_API_KEY. Please create .env file and define it.")
     
-    def __assert_empty_messages(self):
+    def __assert_empty_messages(self) -> None:
         if not self.__messages:
             raise ValueError("Empty messages")
 
 
-    def __assert_last_message_is_user_message(self):
+    def __assert_last_message_is_user_message(self) -> None:
         if self.__messages[-1]["role"] is self.ROLE_ASSISTANT:
             raise ValueError("Last message in messages history is not a user message. Use add_user_message")
