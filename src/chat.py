@@ -31,7 +31,7 @@ class Chat:
         self.__messages.append({"role": self.ROLE_ASSISTANT, "content": text})
 
 
-    def send_message(self) -> str:
+    def send_message(self, system_prompt=None) -> str:
         self.__assert_empty_messages()
         self.__assert_last_message_is_user_message()
 
@@ -39,7 +39,7 @@ class Chat:
             model=self.MODEL,
             max_tokens=self.MAX_TOKENS,
             messages=self.__messages,
-            system=self.SYSTEM_PROMPT
+            system=self.SYSTEM_PROMPT if not system_prompt else system_prompt
         )
 
         # The loop prevents code from failure as content may have a thinking block that doesn't have a text attribute
