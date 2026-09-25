@@ -39,7 +39,7 @@ class Chat:
             messages=self.__messages
         )
 
-        # The loop prevents code from failure is content may have a thinking block that doesn't have a text attribute
+        # The loop prevents code from failure as content may have a thinking block that doesn't have a text attribute
         for block in message.content:
             if hasattr(block, 'text'):
                 return block.text
