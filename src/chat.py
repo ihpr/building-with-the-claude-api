@@ -35,12 +35,16 @@ class Chat:
         self.__assert_empty_messages()
         self.__assert_last_message_is_user_message()
 
-        message = self.__client.messages.create(
-            model=self.MODEL,
-            max_tokens=self.MAX_TOKENS,
-            messages=self.__messages,
-            system=self.SYSTEM_PROMPT if not system_prompt else system_prompt
-        )
+        params = {
+            "model": self.MODEL,
+            "max_tokens": self.MAX_TOKENS,
+            "messages": self.__messages,
+        }
+
+        if system_prompt:
+            params["system"] = system_prompt
+
+        message = self.__client.messages.create(**params)
 
         # The loop prevents code from failure as content may have a thinking block that doesn't have a text attribute
         for block in message.content:
