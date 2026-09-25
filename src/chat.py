@@ -10,8 +10,6 @@ class Chat:
     ROLE_USER = "user"
     ROLE_ASSISTANT = "assistant"
 
-    SYSTEM_PROMPT = "You are a patient math tutor. Do not directly answer student's questions. Guide them to a solution step by step."
-
 
     def __init__(self):
         load_dotenv()
@@ -46,12 +44,11 @@ class Chat:
 
         message = self.__client.messages.create(**params)
 
-        # The loop prevents code from failure as content may have a thinking block that doesn't have a text attribute
-        for block in message.content:
-            if hasattr(block, 'text'):
-                return block.text
-
-        return ''
+        return next(
+            # The loop prevents code from failure as content may have a thinking block that doesn't have a text attribute
+            (block.text for block in message.content if hasattr(block, 'text')),
+            ''
+        )
 
 
     def __assert_claude_api_key(self, api_key: str) -> None:
