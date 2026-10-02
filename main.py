@@ -1,6 +1,5 @@
 from src.chat import Chat
 
-
 chat = Chat()
 
 while True:
