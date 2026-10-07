@@ -14,7 +14,7 @@ while True:
     SYSTEM_PROMPT = "Provide answers as concise as possible."
 
     chat.add_user_message(request)
-    response = chat.send_message(system_prompt=SYSTEM_PROMPT)
+    response = chat.send_message(system_prompt=SYSTEM_PROMPT, effort="1.0")
     chat.add_assitant_message(response)
 
     print(f"\n...\n\n{response}\n")

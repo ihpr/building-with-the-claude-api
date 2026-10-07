@@ -10,6 +10,12 @@ class Chat:
     ROLE_USER = "user"
     ROLE_ASSISTANT = "assistant"
 
+    EFFORT_LOW = "low"
+    EFFORT_MEDIUM = "medium"
+    EFFORT_HIGH = "high"
+    EFFORT_XHIGH = "xhigh"
+    EFFORT_MAX = "max"
+
 
     def __init__(self):
         load_dotenv()
@@ -29,14 +35,18 @@ class Chat:
         self.__messages.append({"role": self.ROLE_ASSISTANT, "content": text})
 
 
-    def send_message(self, system_prompt=None) -> str:
+    def send_message(self, system_prompt: str = None, effort: str = EFFORT_LOW) -> str:
         self.__assert_empty_messages()
         self.__assert_last_message_is_user_message()
+        self.__assert_effort_is_valid(effort)
 
         params = {
             "model": self.MODEL,
             "max_tokens": self.MAX_TOKENS,
             "messages": self.__messages,
+            "output_config": {
+                "effort": effort
+            }
         }
 
         if system_prompt:
@@ -57,9 +67,19 @@ class Chat:
     
     def __assert_empty_messages(self) -> None:
         if not self.__messages:
-            raise ValueError("Empty messages")
+            raise ValueError("Empty chat messages")
 
 
     def __assert_last_message_is_user_message(self) -> None:
         if self.__messages[-1]["role"] is self.ROLE_ASSISTANT:
-            raise ValueError("Last message in messages history is not a user message. Use add_user_message")
+            raise ValueError("Last message in chat history is not a user message. Use add_user_message")
+
+    def __assert_effort_is_valid(self, effort: str) -> None:
+        match effort:
+            case self.EFFORT_LOW | self.EFFORT_MEDIUM | self.EFFORT_HIGH | self.EFFORT_XHIGH | self.EFFORT_MAX:
+                return None
+            case _:
+                raise ValueError(
+                    f"Effort must be of value: {self.EFFORT_LOW}/{self.EFFORT_MEDIUM}/{self.EFFORT_HIGH}/{self.EFFORT_XHIGH}/{self.EFFORT_MAX}"
+                )
+                
