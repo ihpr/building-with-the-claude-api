@@ -16,7 +16,6 @@ class Chat:
     EFFORT_XHIGH = "xhigh"
     EFFORT_MAX = "max"
 
-
     def __init__(self):
         load_dotenv()
 
@@ -26,14 +25,11 @@ class Chat:
         self.__client = Anthropic(api_key=claude_api_key)
         self.__messages = []
 
-
     def add_user_message(self, text: str) -> None:
         self.__messages.append({"role": self.ROLE_USER, "content": text})
 
-
     def add_assitant_message(self, text: str) -> None:
         self.__messages.append({"role": self.ROLE_ASSISTANT, "content": text})
-
 
     def send_message(self, system_prompt: str = None, effort: str = EFFORT_LOW) -> str:
         self.__assert_empty_messages()
@@ -60,7 +56,6 @@ class Chat:
             ''
         )
 
-
     def __assert_claude_api_key(self, api_key: str) -> None:
         if not api_key:
             raise ValueError("Missed CLAUDE_API_KEY. Please create .env file and define it.")
@@ -68,7 +63,6 @@ class Chat:
     def __assert_empty_messages(self) -> None:
         if not self.__messages:
             raise ValueError("Empty chat messages")
-
 
     def __assert_last_message_is_user_message(self) -> None:
         if self.__messages[-1]["role"] is self.ROLE_ASSISTANT:
